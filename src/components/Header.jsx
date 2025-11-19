@@ -1,18 +1,30 @@
 import { useState } from 'react'
-import { Menu, Search, Sun, Moon, PlayCircle, Newspaper, Video, Home, Info, Phone, ShieldAlert } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Menu, Search, Sun, Moon, PlayCircle, Newspaper, Video, Home, Info, Phone, ShieldAlert, Users, Tv, Vote, CheckCheck } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Header({ onToggleTheme, theme }) {
   const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const navigate = useNavigate()
+
+  const submit = (e) => {
+    e.preventDefault()
+    if(query.trim()) navigate(`/search?q=${encodeURIComponent(query.trim())}`)
+  }
 
   const nav = [
     { to: '/', label: 'Home', icon: <Home size={16} /> },
     { to: '/categories', label: 'Categories', icon: <Newspaper size={16} /> },
     { to: '/live', label: 'Live Updates', icon: <PlayCircle size={16} /> },
     { to: '/videos', label: 'Videos', icon: <Video size={16} /> },
+    { to: '/election', label: 'Election', icon: <Vote size={16} /> },
+    { to: '/district-news', label: 'Districts', icon: <Tv size={16} /> },
+    { to: '/live-tv', label: 'Live TV', icon: <Tv size={16} /> },
+    { to: '/fact-check', label: 'Fact Check', icon: <CheckCheck size={16} /> },
+    { to: '/authors', label: 'Authors', icon: <Users size={16} /> },
     { to: '/about', label: 'About', icon: <Info size={16} /> },
     { to: '/contact', label: 'Contact', icon: <Phone size={16} /> },
-    { to: '/policies', label: 'Policies', icon: <ShieldAlert size={16} /> },
+    { to: '/privacy', label: 'Privacy', icon: <ShieldAlert size={16} /> },
   ]
 
   return (
@@ -40,10 +52,10 @@ function Header({ onToggleTheme, theme }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full bg-black/5 dark:bg-white/10">
+            <form onSubmit={submit} className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full bg-black/5 dark:bg-white/10">
               <Search size={16} />
-              <input placeholder="Search..." className="bg-transparent outline-none text-sm w-40" />
-            </div>
+              <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search..." className="bg-transparent outline-none text-sm w-40" />
+            </form>
             <button onClick={onToggleTheme} className="p-2 rounded hover:bg-black/5 dark:hover:bg-white/10" aria-label="Toggle theme">
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
@@ -52,6 +64,10 @@ function Header({ onToggleTheme, theme }) {
 
         {open && (
           <div className="md:hidden py-2 border-t border-red-500/20 grid grid-cols-2 gap-2">
+            <form onSubmit={submit} className="col-span-2 flex items-center gap-2 px-3 py-2 rounded bg-black/5 dark:bg-white/10">
+              <Search size={16} />
+              <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search..." className="bg-transparent outline-none text-sm w-full" />
+            </form>
             {nav.map((n) => (
               <Link key={n.to} to={n.to} className="px-3 py-2 text-sm rounded bg-black/5 dark:bg-white/10" onClick={() => setOpen(false)}>
                 <span className="inline-flex items-center gap-2">{n.icon}{n.label}</span>

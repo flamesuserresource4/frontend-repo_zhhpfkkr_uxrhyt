@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Youtube } from 'lucide-react'
+import { Facebook, Instagram, Youtube, Twitter } from 'lucide-react'
 
 function TopBar() {
   const now = new Date()
@@ -13,9 +13,10 @@ function TopBar() {
           <span className="text-white/50">{time}</span>
         </div>
         <div className="flex items-center gap-4">
-          <a href="#" aria-label="Facebook" className="hover:text-red-400"><Facebook size={16} /></a>
-          <a href="#" aria-label="Instagram" className="hover:text-red-400"><Instagram size={16} /></a>
-          <a href="#" aria-label="YouTube" className="hover:text-red-400"><Youtube size={16} /></a>
+          <a href="https://www.facebook.com/share/1BcdrHvdYk/" target="_blank" rel="noreferrer" aria-label="Facebook" className="hover:text-red-400"><Facebook size={16} /></a>
+          <a href="https://www.instagram.com/rajasthanjunctionnews?igsh=MXdhOHVhdGhvYm96Yg==" target="_blank" rel="noreferrer" aria-label="Instagram" className="hover:text-red-400"><Instagram size={16} /></a>
+          <a href="https://youtube.com/@rajasthanjunction360?si=iZx5_-E6B3ZDvTSv" target="_blank" rel="noreferrer" aria-label="YouTube" className="hover:text-red-400"><Youtube size={16} /></a>
+          <a href="#" target="_blank" rel="noreferrer" aria-label="Twitter" className="hover:text-red-400"><Twitter size={16} /></a>
         </div>
       </div>
     </div>
