@@ -1,73 +1,61 @@
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import TopBar from './components/TopBar'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import HomePage from './components/HomePage'
+import CategoriesPage from './components/CategoriesPage'
+import LivePage from './components/LivePage'
+import VideosPage from './components/VideosPage'
+import StaticPage from './components/StaticPage'
+import ArticlePage from './components/ArticlePage'
+
+function ScrollToTop(){
+  const { pathname } = useLocation()
+  useEffect(()=>{ window.scrollTo(0,0) }, [pathname])
+  return null
+}
+
 function App() {
+  const [theme, setTheme] = useState('light')
+  useEffect(()=>{
+    const saved = localStorage.getItem('theme') || 'light'
+    setTheme(saved)
+    document.documentElement.classList.toggle('dark', saved === 'dark')
+  }, [])
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    localStorage.setItem('theme', next)
+    document.documentElement.classList.toggle('dark', next === 'dark')
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
+    <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white">
+      <ScrollToTop />
+      <TopBar />
+      <Header onToggleTheme={toggleTheme} theme={theme} />
 
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
-            </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/live" element={<LivePage />} />
+        <Route path="/videos" element={<VideosPage />} />
+        <Route path="/about" element={<StaticPage title="About Rajasthan Junction">Rajasthan Junction is a modern, fast, and clean digital news portal covering Rajasthan and India. We bring you breaking news, trending stories, and viral updates with a focus on accuracy and speed.</StaticPage>} />
+        <Route path="/contact" element={<StaticPage title="Contact Us">For news tips, partnerships, or feedback, email us at contact@rajasthanjunction.in</StaticPage>} />
+        <Route path="/policies" element={<StaticPage title="Privacy Policy & Terms">Your privacy matters. We do not share personal data with third parties without consent. Use of this website constitutes acceptance of our terms and policies.</StaticPage>} />
+        <Route path="/article/:id" element={<ArticleRoute />} />
+      </Routes>
 
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
-
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
-          </div>
-
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
-          </div>
-        </div>
-      </div>
+      <Footer />
     </div>
   )
+}
+
+function ArticleRoute(){
+  const { pathname } = useLocation()
+  const id = pathname.split('/').pop()
+  return <ArticlePage id={id} />
 }
 
 export default App
